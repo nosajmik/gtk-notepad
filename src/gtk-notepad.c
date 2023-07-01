@@ -14,6 +14,8 @@ void print_usage(void) {
 
 
 void gtk_notepad_set_title(const char* filename) {
+    printf("%s\n", __func__);
+
     char *fn = malloc(strlen(filename) + 1);
     strcpy(fn, filename);
 
@@ -41,6 +43,8 @@ void gtk_notepad_set_title(const char* filename) {
 
 
 void gtk_notepad_show_about_box(void) {
+    printf("%s\n", __func__);
+
     GtkWidget *dialog = gtk_about_dialog_new();
     GtkAboutDialog *dlg = GTK_ABOUT_DIALOG(dialog);
     gtk_about_dialog_set_name(dlg, "GTK Notepad");
@@ -56,6 +60,8 @@ void gtk_notepad_show_about_box(void) {
 
 
 int gtk_notepad_ask_save_cancel(void) {
+    printf("%s\n", __func__);
+
     GtkWidget *dialog;
 
     dialog = gtk_message_dialog_new(gwindow,
@@ -80,6 +86,7 @@ int gtk_notepad_ask_save_cancel(void) {
 
 /* Create window icon */
 GdkPixbuf *create_pixbuf(const char *filename) {
+    printf("%s\n", __func__);
     GdkPixbuf *pixbuf;
     GError *error = NULL;
     pixbuf = gdk_pixbuf_new_from_file(filename, &error);
@@ -94,32 +101,38 @@ GdkPixbuf *create_pixbuf(const char *filename) {
 }
 
 void gtk_notepad_text_changed(void) {
+    printf("%s\n", __func__);
     modified = TRUE;
     gtk_statusbar_update_lncol();
 }
 
 
 void gtk_notepad_cut(void) {
+    printf("%s\n", __func__);
     gtk_text_buffer_cut_clipboard(buffer, clipboard, TRUE);
 }
 
 
 void gtk_notepad_copy(void) {
+    printf("%s\n", __func__);
     gtk_text_buffer_copy_clipboard(buffer, clipboard);
 }
 
 
 void gtk_notepad_paste(void) {
+    printf("%s\n", __func__);
     gtk_text_buffer_paste_clipboard(buffer, clipboard, NULL, TRUE);
 }
 
 
 void gtk_notepad_delete(void) {
+    printf("%s\n", __func__);
     gtk_text_buffer_delete_selection(buffer, TRUE, TRUE);
 }
 
 
 void gtk_notepad_select_all(void) {
+    printf("%s\n", __func__);
     GtkTextIter start, end;
     gtk_text_buffer_get_start_iter(buffer, &start);
     gtk_text_buffer_get_end_iter(buffer, &end);
@@ -128,6 +141,7 @@ void gtk_notepad_select_all(void) {
 }
 
 void gtk_notepad_insert_time_date(void) {
+    printf("%s\n", __func__);
     time_t now = time(0);
     char* datetime = asctime(localtime(&now));
 
@@ -138,6 +152,7 @@ void gtk_notepad_insert_time_date(void) {
 
 
 void gtk_text_view_toggle_wrapping(void) {
+    printf("%s\n", __func__);
     GtkWrapMode mode;
     if (wrapping)
         mode = GTK_WRAP_NONE;
@@ -152,6 +167,7 @@ void gtk_text_view_toggle_wrapping(void) {
 
 
 void gtk_notepad_select_font(void) {
+    printf("%s\n", __func__);
     GtkResponseType result;
 
     GtkWidget *dialog = gtk_font_selection_dialog_new("Select a font");
@@ -175,6 +191,7 @@ void gtk_notepad_select_font(void) {
 
 
 void gtk_statusbar_update_lncol(void) {
+    printf("%s\n", __func__);
     char *msg;
     int row, col;
     GtkTextIter iter;
@@ -199,6 +216,7 @@ void gtk_statusbar_update_lncol(void) {
 
 /* Create a new file */
 void gtk_notepad_new(void) {
+    printf("%s\n", __func__);
     free(loaded_fn);
     loaded_fn = malloc(1);
     loaded_fn[0] = '\0';
@@ -210,6 +228,7 @@ void gtk_notepad_new(void) {
 
 
 char gtk_notepad_open_file(const char* filename) {
+    printf("%s\n", __func__);
     FILE *fp = fopen(filename, "rb");
     if (!fp) {
         fprintf(stderr, "%s: fopen(null): %s\n",
@@ -245,6 +264,7 @@ char gtk_notepad_open_file(const char* filename) {
 
 /* Open an existing file */
 void gtk_notepad_open(void) {
+    printf("%s\n", __func__);
     if (modified == TRUE) {
         int response = gtk_notepad_ask_save_cancel();
         switch (response) {
@@ -297,6 +317,7 @@ void gtk_notepad_open(void) {
 
 /* Save the file (actually) */
 char gtk_notepad_save_file(const char* filename) {
+    printf("%s\n", __func__);
     FILE *fp = fopen(filename, "wb");
     if (!fp) {
         fprintf(stderr, "%s: fopen(null): %s\n",
@@ -330,6 +351,7 @@ char gtk_notepad_save_file(const char* filename) {
 
 /* Save currently open file */
 void gtk_notepad_save(void) {
+    printf("%s\n", __func__);
     if (NO_FILE_LOADED)
         gtk_notepad_saveas();
     else
@@ -339,6 +361,7 @@ void gtk_notepad_save(void) {
 
 /* Save file as */
 void gtk_notepad_saveas(void) {
+    printf("%s\n", __func__);
     GtkWidget *dialog;
     GtkFileChooser *chooser;
     GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
@@ -383,6 +406,7 @@ void gtk_notepad_saveas(void) {
 
 /* Create and setup a menubar */
 void setup_menubar(void) {
+    printf("%s\n", __func__);
     menubar = gtk_menu_bar_new();
 
     filemenu = gtk_menu_new();
@@ -532,6 +556,7 @@ void setup_menubar(void) {
 
 
 void setup_textarea(void) {
+    printf("%s\n", __func__);
     scrolledwindow = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(
                                    scrolledwindow),
@@ -557,6 +582,7 @@ void setup_textarea(void) {
 
 
 void setup_statusbar(void) {
+    printf("%s\n", __func__);
     statusbar = gtk_statusbar_new();
     gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
 
@@ -565,6 +591,7 @@ void setup_statusbar(void) {
 
 
 int main(int argc, char* argv[]) {
+    printf("%s\n", __func__);
     PROGNAME = argv[0];
 
     // We don't want errors on the first `free()'
